@@ -1,0 +1,26 @@
+text,label
+"Free money! Click here to claim your prize now!",SPAM
+"Meeting scheduled for tomorrow at 3 PM in conference room A",HAM
+"Congratulations! You've won $1000000! Send your bank details immediately",SPAM
+"Please review the attached document and provide your feedback",HAM
+"URGENT: Your account will be closed! Click link to verify",SPAM
+"Thank you for your presentation yesterday. Very insightful content",HAM
+"Get rich quick! Investment opportunity with guaranteed returns!",SPAM
+"Reminder: Project deadline is next Friday. Please submit your work",HAM
+"You have been selected for a special offer! Limited time only!",SPAM
+"Can we reschedule our meeting to Thursday afternoon?",HAM
+"WARNING: Suspicious activity detected. Verify your identity now",SPAM
+"Great job on the quarterly report. The analysis was comprehensive",HAM
+"Win a free iPhone! No purchase necessary! Click here now!",SPAM
+"Please confirm your attendance for the team building event",HAM
+"Your credit score can improve instantly! Apply for our service",SPAM
+"Looking forward to our collaboration on the upcoming project",HAM
+"Act fast! 90% discount expires tonight! Don't miss out!",SPAM
+"The client was very satisfied with our service delivery",HAM
+"Claim your inheritance of $5,000,000 from distant relative",SPAM
+"Weekly team standup meeting at 9 AM every Monday",HAM
+"Make thousands working from home! No experience required!",SPAM
+"Please update your contact information in the employee portal",HAM
+"You're pre-approved for a $50,000 loan! No credit check needed",SPAM
+"Thanks for taking care of the customer issue so quickly",HAM
+"Miracle weight loss pill! Lose 30 pounds in 10 days guaranteed",SPAM
