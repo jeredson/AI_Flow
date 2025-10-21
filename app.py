@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, session
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression, LogisticRegressionCV
@@ -10,13 +11,19 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 import pickle
 import os
-from groq import Groq
+import warnings
+warnings.filterwarnings('ignore')
+
+try:
+    from groq import Groq
+    groq_client = Groq(api_key="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")
+except:
+    groq_client = None
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'
+CORS(app)
+app.secret_key = 'ai-flow-ml-platform-secret-key-2024'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-
-groq_client = Groq(api_key="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")
 
 @app.route('/')
 def index():
@@ -25,8 +32,16 @@ def index():
 @app.route('/train', methods=['POST'])
 def train():
     try:
-        model_type = request.form['model_type']
+        model_type = request.form.get('model_type')
+        if not model_type:
+            return jsonify({'success': False, 'error': 'No model type selected'})
+        
+        if 'dataset' not in request.files:
+            return jsonify({'success': False, 'error': 'No file uploaded'})
+        
         file = request.files['dataset']
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No file selected'})
         
         if file.filename.endswith('.csv'):
             data = pd.read_csv(file)
@@ -92,6 +107,9 @@ def train():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
+        if 'model' not in session:
+            return jsonify({'success': False, 'error': 'No trained model found. Please train a model first.'})
+        
         model = pickle.loads(session['model'])
         model_type = session['model_type']
         
@@ -112,8 +130,11 @@ def predict():
 @app.route('/generate', methods=['POST'])
 def generate():
     try:
-        action = request.form['action']
-        component = request.form['component']
+        if not groq_client:
+            return jsonify({'success': False, 'error': 'Groq API not available'})
+        
+        action = request.form.get('action')
+        component = request.form.get('component')
         
         if action == 'code':
             prompt = f"Generate Python code for {component} using scikit-learn with comments."
@@ -131,4 +152,4 @@ def generate():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, debug=False)

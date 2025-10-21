@@ -71,7 +71,7 @@
                 </div>
 
                 <div style="text-align: center; margin: 30px 0;">
-                    <input type="file" id="file-input" accept=".csv,.xlsx" onchange="handleFileSelect(event)">
+                    <input type="file" id="file-input" accept=".csv,.xlsx" onchange="handleFileSelect(event)" style="display: none;">
                     <button class="action-btn input-btn" onclick="document.getElementById('file-input').click()">📁 Input Data</button>
                     <button class="action-btn execute-btn" onclick="executeTraining()">▶️ Execute</button>
                 </div>
