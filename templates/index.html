@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Flow: Low-Code ML Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 250px 1fr 350px;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .toolbox {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .toolbox h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .component-btn {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .component-btn:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        .component-btn.active {
+            background: #27ae60;
+        }
+
+        .workspace {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .workspace h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .status-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .status-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .input-btn {
+            background: #27ae60;
+            color: white;
+        }
+
+        .input-btn:hover {
+            background: #229954;
+        }
+
+        .execute-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .execute-btn:hover {
+            background: #c0392b;
+        }
+
+        .results-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .input-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .predict-btn {
+            background: #f39c12;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .predict-btn:hover {
+            background: #d68910;
+        }
+
+        .result-display {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f8f5;
+            border-left: 4px solid #27ae60;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .result-display.active {
+            display: block;
+        }
+
+        .insight-panel {
+            background: #ecf0f1;
+            padding: 20px;
+        }
+
+        .insight-panel h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .insight-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .code-btn {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .code-btn:hover {
+            background: #8e44ad;
+        }
+
+        .explain-btn {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .explain-btn:hover {
+            background: #7d3c98;
+        }
+
+        .insight-content {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #3498db;
+        }
+
+        .error {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbox, .insight-panel {
+                border-bottom: 2px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI-Flow</h1>
+            <p>Low-Code Machine Learning Platform</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Toolbox -->
+            <div class="toolbox">
+                <h2>ML Components</h2>
+                <button class="component-btn" data-component="linear">Linear Regression</button>
+                <button class="component-btn" data-component="logistic">Logistic Regression</button>
+                <button class="component-btn" data-component="text">Text Classification</button>
+            </div>
+
+            <!-- Workspace -->
+            <div class="workspace">
+                <h2>Workspace</h2>
+                
+                <div class="status-box">
+                    <div class="status-label">Selected Component:</div>
+                    <div class="status-value" id="selected-component">None</div>
+                </div>
+
+                <div class="status-box">
+                    <div class="status-label">File Selected:</div>
+                    <div class="status-value" id="selected-file">None</div>
+                </div>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <input type="file" id="file-input" accept=".csv,.xlsx" style="display: none;">
+                    <button class="action-btn input-btn" onclick="document.getElementById('file-input').click()">
+                        📁 Input Data
+                    </button>
+                    <button class="action-btn execute-btn" onclick="executeTraining()">
+                        ▶️ Execute
+                    </button>
+                </div>
+
+                <div id="results-section" class="results-section">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <div id="result-display" class="result-display">
+                    <!-- Prediction results will appear here -->
+                </div>
+            </div>
+
+            <!-- Insight Panel -->
+            <div class="insight-panel">
+                <h2>AI Insights</h2>
+                <button class="insight-btn code-btn" onclick="generateContent('code')">
+                    💻 Generate Code
+                </button>
+                <button class="insight-btn explain-btn" onclick="generateContent('explain')">
+                    📚 Generate Explanation
+                </button>
+                <div class="insight-content" id="insight-content">
+                    Select a component and click a button to generate insights...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedComponent = null;
+        let selectedFile = null;
+        let modelTrained = false;
+
+        // Component selection
+        document.querySelectorAll('.component-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.component-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedComponent = this.dataset.component;
+                document.getElementById('selected-component').textContent = this.textContent;
+                modelTrained = false;
+                document.getElementById('results-section').classList.remove('active');
+            });
+        });
+
+        // File selection
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            selectedFile = e.target.files[0];
+            if (selectedFile) {
+                document.getElementById('selected-file').textContent = selectedFile.name;
+            }
+        });
+
+        // Execute training
+        async function executeTraining() {
+            if (!selectedComponent) {
+                alert('Please select an ML component!');
+                return;
+            }
+
+            if (!selectedFile) {
+                alert('Please select a dataset file!');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('model_type', selectedComponent);
+            formData.append('dataset', selectedFile);
+
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.innerHTML = '<div class="loading">Training model... Please wait.</div>';
+            resultsSection.classList.add('active');
+
+            try {
+                const response = await fetch('/train', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    resultsSection.innerHTML = `
+                        <div class="success">
+                            Model trained successfully!<br>
+                            ${result.metric}: ${result.score}
+                        </div>
+                    `;
+                    modelTrained = true;
+                    setTimeout(() => createPredictionInterface(), 1000);
+                } else {
+                    resultsSection.innerHTML = `<div class="error">Error: ${result.error}</div>`;
+                }
+            } catch (error) {
+                resultsSection.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Create prediction interface
+        function createPredictionInterface() {
+            const resultsSection = document.getElementById('results-section');
+            
+            if (selectedComponent === 'text') {
+                resultsSection.innerHTML = `
+                    <h3>Make Predictions</h3>
+                    <div class="input-group">
+                        <label>Enter text to classify:</label>
+                        <textarea id="text-input" placeholder="Enter your text here..."></textarea>
+                    </div>
+                    <button class="predict-btn" onclick="makePrediction()">Classify Text</button>
+                `;
+            } else {
+                resultsSection.innerHTML = `
+                    <h3>Make Predictions</h3>
+                    <p>Enter feature values (separated by commas):</p>
+                    <div class="input-group">
+                        <label>Feature Values:</label>
+                        <input type="text" id="feature-input" placeholder="e.g., 1.5, 2.3, 4.1">
+                    </div>
+                    <button class="predict-btn" onclick="makePrediction()">Predict</button>
+                `;
+            }
+        }
+
+        // Make prediction
+        async function makePrediction() {
+            const resultDisplay = document.getElementById('result-display');
+            
+            try {
+                let formData = new FormData();
+
+                if (selectedComponent === 'text') {
+                    const text = document.getElementById('text-input').value;
+                    if (!text.trim()) {
+                        alert('Please enter text!');
+                        return;
+                    }
+                    formData.append('text', text);
+                } else {
+                    const features = document.getElementById('feature-input').value;
+                    if (!features.trim()) {
+                        alert('Please enter feature values!');
+                        return;
+                    }
+                    // Parse comma-separated values
+                    const values = features.split(',').map(v => v.trim());
+                    values.forEach((val, idx) => {
+                        formData.append(`feature_${idx}`, val);
+                    });
+                }
+
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
